@@ -1,0 +1,18 @@
+{
+	"id": "higher_steaks",
+	"name": "Higher Steaks",
+	"author": [
+		"AtlanticAccent"
+	],
+	"badge_colour": "7d0e33",
+	"description": "Combine modded stakes so they actually \"apply all previous stakes\".",
+	"prefix": "highsteak",
+	"display_name": "Steak",
+	"dependencies": [
+		"Steamodded (>=1.0.0~BETA-1224a)",
+		"Lovely (>=0.8)"
+	],
+	"main_file": "higher_steaks.lua",
+	"version": "0.1.0",
+	"priority": 999999,
+}
