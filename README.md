@@ -11,6 +11,12 @@ that Stake will never be applied to runs on Tartare Stake even if
 Tartare Stake is also configured to apply another modded Stake that
 would apply it.
 
+## Known Limitations
+
+
+- Enabling or disabling a Stake requires restarting the game to apply the changes to Tartare Stake
+- Changing what Stakes are applied by Tartare Stake will not update existing runs on Tartare Stake (ie: adding a Stake won't apply it to existing runs, whilst a removed Stake would still apply)
+
 ## Known Issues
 
 - The "also applies" section for Tartare Stake on the new run screen
