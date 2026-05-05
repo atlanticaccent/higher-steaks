@@ -226,6 +226,13 @@ HSUtils = {
             copy[k] = v
         end
         return copy
+    end,
+    dbg_table = function(table)
+        local output = ""
+        for k, v in pairs(table) do
+            output = output .. k .. ': ' .. type(v) .. ' / \n'
+        end
+        return output
     end
 }
 
@@ -238,26 +245,27 @@ SMODS.current_mod.calculate = function(mod, context)
 end
 --]]
 
-local function dbg_table(table)
-    local output = ""
-    for k, v in pairs(table) do output = output .. k .. ': ' .. type(v) .. ' / ' end
-    return output
-end
-
 local start_run_ref = Game.start_run
 Game.start_run = function(game, args)
     print("in start_run wrapper")
     local stake_tartare = SMODS.Stakes[tartare_key]
     
-    print("start_run args " .. args)
-    if args.stake == stake_tartare.order then
+    --[[ debug
+    -- HigherSteaks.game = game
+    -- print(game)
+    assert(false)
+    --]]
+    
+    if args and args.stake == stake_tartare.order or
+        game.SAVED_GAME and game.SAVED_GAME.GAME and game.SAVED_GAME.GAME.highersteak_tartare_run
+    then
         print("in tartare case")
         for _, applied in ipairs(stake_tartare.applied_stakes) do
             local applied_stake = SMODS.Stakes[applied]
             if applied_stake.original_mod and not HigherSteaks.original_applies[applied] then
-                HigherSteaks.original_applies[applied] = shallow_copy(applied_stake.applied_stakes)
+                HigherSteaks.original_applies[applied] = HSUtils.shallow_copy(applied_stake.applied_stakes)
                 local filtered_applied = HSUtils.filter(
-                    shallow_copy(applied_stake.applied_stakes),
+                    HSUtils.shallow_copy(applied_stake.applied_stakes),
                     function(key)
                         return not SMODS.Stakes[key].original_mod or
                             HSUtils.contains_value(stake_tartare.applied_stakes, key)
@@ -268,9 +276,9 @@ Game.start_run = function(game, args)
                     {applied_stakes = filtered_applied},
                     true -- silent
                 )
-                print(SMODS.Stakes[applied].applied_stakes)
             end
         end
+        G.GAME['highersteak_tartare_run'] = true
     else
         print("non-tartare case")
         for stake_key, original_applies in pairs(HigherSteaks.original_applies) do
